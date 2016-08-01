@@ -26,6 +26,13 @@ const setBodyAsParsedXML = (response) => {
 
 export class RNS3 {
 
+  static upload(url, policy, method = "POST") {
+    return Request.create(url, method, policy)
+      .set("file", file)
+      .send()
+      .then(setBodyAsParsedXML);
+  }
+
   static put(file, options) {
     options = Object.assign({}, options, {
       key: (options.keyPrefix || '') + file.name,
@@ -36,10 +43,6 @@ export class RNS3 {
     let method = "POST";
     let policy = S3Policy.generate(options);
 
-    return Request.create(url, method, policy)
-      .set("file", file)
-      .send()
-      .then(setBodyAsParsedXML);
+    return RNS3.upload(url, method, policy);
   }
-
 }
